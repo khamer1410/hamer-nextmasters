@@ -1,5 +1,4 @@
-import { ServerComponent } from "./ui/atoms/ServerComponent";
-import { ClientComponent } from "./ui/atoms/ClientComponent";
+import { NavBar } from "@/ui/organisms/NavBar";
 
 const products = [
 	{
@@ -29,18 +28,16 @@ export async function generateStaticParams() {
 
 export default function Home() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<ServerComponent>
-				<ClientComponent>
-					<ServerComponent />
-				</ClientComponent>
-			</ServerComponent>
-			<ul data-testid="products-list" className="flex justify-between gap-1">
-				{products.map((product, index) => (
-					<Product key={index} name={product.name} description={product.description} />
-				))}
-			</ul>
-		</main>
+		<>
+			<NavBar />
+			<main className="flex min-h-screen flex-col items-center justify-between p-24">
+				<ul data-testid="products-list" className="flex justify-between gap-1">
+					{products.map((product, index) => (
+						<Product key={index} name={product.name} description={product.description} />
+					))}
+				</ul>
+			</main>
+		</>
 	);
 }
 
