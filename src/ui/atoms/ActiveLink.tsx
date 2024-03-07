@@ -4,12 +4,15 @@ import clsx from "clsx";
 import { type AnchorHTMLAttributes } from "react";
 
 interface ActiveLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-	isActive: boolean;
+	pathname: string;
 	href: Route;
 	text: string;
+	exact?: boolean;
 }
 
-export const ActiveLink = ({ isActive, href, text }: ActiveLinkProps) => {
+export const ActiveLink = ({ pathname, href, text, exact = false }: ActiveLinkProps) => {
+	const isActive = exact ? pathname === href : pathname.startsWith(href);
+
 	return (
 		<Link
 			href={href}
