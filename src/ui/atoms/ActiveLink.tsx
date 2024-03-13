@@ -17,7 +17,7 @@ export const ActiveLink = ({ pathname, href, text, exact = false }: ActiveLinkPr
 		<Link
 			href={href}
 			className={clsx("text-blue-500", { "font-bold underline": isActive })}
-			aria-current={isActive}
+			aria-current={isActive ? "page" : undefined}
 		>
 			{text}
 		</Link>

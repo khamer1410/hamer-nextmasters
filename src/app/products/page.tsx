@@ -1,26 +1,22 @@
 import { ProductCover } from "@/ui/atoms/ProductCover";
 
-const products = [
-	{
-		name: "Running Shoes",
-		description: "High-performance running shoes for athletes",
-	},
-	{
-		name: "Sports Bra",
-		description: "Comfortable and supportive sports bra for active women",
-	},
-	{
-		name: "Athletic Shorts",
-		description: "Lightweight and breathable shorts for workouts",
-	},
-	{
-		name: "Athletic Cup",
-		description: "Cool cup",
-	},
-];
+export async function generateStaticParams() {
+	const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
+	const products = (await res.json()) as { id: string; title: string }[];
 
-export default function ProductsPage() {
-	<main>
-		<h1>HELLLO</h1>
-	</main>;
+	return products.map((product) => ({ productId: product.id }));
+}
+
+export default async function ProductsPage({ params }: { params: { productId: string } }) {
+	const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=20`);
+	const products = (await res.json()) as { id: string; title: string }[];
+
+	console.log(products.length);
+	return (
+		<main>
+			<h1>HELLLO</h1>
+
+			<ProductCover />
+		</main>
+	);
 }
