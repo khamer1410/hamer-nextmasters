@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import NextImage from "next/image";
 import { Image } from "@/ui/atoms/Image";
 
-interface Product {
+export interface Product {
 	title: string;
 	price: number;
 	description: string;

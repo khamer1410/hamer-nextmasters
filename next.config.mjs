@@ -11,6 +11,15 @@ const nextConfig = {
       }
     ]
   },
+  redirects: async () => {
+    return [
+      {
+        source: '/products',
+        destination: '/products/1',
+        permanent: true,
+      },
+    ];
+  },
   experimental: {
     typedRoutes: true,
     mdxRs: true,
