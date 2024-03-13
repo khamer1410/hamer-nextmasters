@@ -1,16 +1,20 @@
+"use client";
+
 import { type Route } from "next";
 import Link from "next/link";
 import clsx from "clsx";
 import { type AnchorHTMLAttributes } from "react";
+import { usePathname } from "next/navigation";
 
 interface ActiveLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-	pathname: string;
 	href: Route;
 	text: string;
 	exact?: boolean;
 }
 
-export const ActiveLink = ({ pathname, href, text, exact = false }: ActiveLinkProps) => {
+export const ActiveLink = ({ href, text, exact = false }: ActiveLinkProps) => {
+	const pathname = usePathname();
+
 	const isActive = exact ? pathname === href : pathname.startsWith(href);
 
 	return (
