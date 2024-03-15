@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
 import NextImage from "next/image";
 import { Image } from "@/ui/atoms/Image";
-
-export interface Product {
-	title: string;
-	price: number;
-	description: string;
-	category: string;
-	image: string;
-	longDescription: string;
-	rating: {
-		rate: number;
-		count: number;
-	};
-	id: string;
-}
+import { type Product } from "@/types/types";
 
 export async function generateStaticParams() {
 	const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);

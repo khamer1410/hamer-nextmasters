@@ -1,18 +1,12 @@
 import { notFound } from "next/navigation";
-import type { Product } from "../../product/[productId]/page";
+import { type Route } from "next";
 import { ProductCover } from "@/ui/atoms/ProductCover";
 import { Pagination } from "@/ui/organisms/Pagination";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
+import { getProducts } from "@/utils/getProducts";
 
 const PRODUCTS_PER_PAGE = 5;
 const ALL_PRODUCTS = 25;
-
-async function getProducts({ take = 5, offset = 0 }: { take?: number; offset?: number }) {
-	const res = await fetch(
-		`https://naszsklep-api.vercel.app/api/products?take=${take}&offset=${offset}`,
-	);
-	return (await res.json()) as Product[];
-}
 
 export default async function ProductsPage({ params }: { params: { pageId: string } }) {
 	console.log(params);
@@ -43,7 +37,7 @@ export default async function ProductsPage({ params }: { params: { pageId: strin
 
 			<Pagination>
 				{Array.from({ length: productPages }).map((_, index) => (
-					<ActiveLink key={index} href={`/products/${index + 1}`} text={`${index + 1}`} />
+					<ActiveLink key={index} href={`/products/${index + 1}` as Route} text={`${index + 1}`} />
 				))}
 			</Pagination>
 		</main>
