@@ -8,10 +8,17 @@ import { getProducts } from "@/utils/getProducts";
 const PRODUCTS_PER_PAGE = 5;
 const ALL_PRODUCTS = 25;
 
-export default async function ProductsPage({ params }: { params: { pageId: string } }) {
-	console.log(params);
+// This function gets called at build time
+export async function generateStaticParams() {
+	const paths = [1, 2, 3, 4, 5];
 
-	const pageNumber = parseFloat(params.pageId);
+	// We'll pre-render only these paths at build time.
+	// { fallback: false } means other routes should 404.
+	return paths.map((id) => ({ pageId: id.toString() }));
+}
+
+async function showProducts(pageId: string) {
+	const pageNumber = parseFloat(pageId);
 
 	const products = await getProducts({
 		take: PRODUCTS_PER_PAGE,
@@ -25,6 +32,13 @@ export default async function ProductsPage({ params }: { params: { pageId: strin
 		return notFound();
 	}
 
+	return { products, productPages };
+}
+
+export default async function ProductsPage({ params }: { params: { pageId: string } }) {
+	const { pageId } = params;
+
+	const { products, productPages } = await showProducts(pageId);
 	return (
 		<main>
 			<h1>HELLLO all products - {params.pageId}</h1>

@@ -29,8 +29,6 @@ export default async function Product({ params }: { params: { productId: string 
 	const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${productId}`);
 	const product = (await res.json()) as Product;
 
-	console.log(product);
-
 	const { title, price, description, category, image, longDescription, rating, id } = product;
 
 	return (
