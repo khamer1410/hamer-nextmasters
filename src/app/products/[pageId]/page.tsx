@@ -5,20 +5,26 @@ import { Pagination } from "@/ui/organisms/Pagination";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 
 const PRODUCTS_PER_PAGE = 5;
+const ALL_PRODUCTS = 25;
+
+async function getProducts({ take = 5, offset = 0 }: { take?: number; offset?: number }) {
+	const res = await fetch(
+		`https://naszsklep-api.vercel.app/api/products?take=${take}&offset=${offset}`,
+	);
+	return (await res.json()) as Product[];
+}
 
 export default async function ProductsPage({ params }: { params: { pageId: string } }) {
 	console.log(params);
-	const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=20`);
-	const allProducts = (await res.json()) as Product[];
 
 	const pageNumber = parseFloat(params.pageId);
 
-	const products = allProducts.slice(
-		(pageNumber - 1) * PRODUCTS_PER_PAGE,
-		pageNumber * PRODUCTS_PER_PAGE,
-	);
+	const products = await getProducts({
+		take: PRODUCTS_PER_PAGE,
+		offset: (pageNumber - 1) * PRODUCTS_PER_PAGE,
+	});
 
-	const productPages = Math.ceil(allProducts.length / PRODUCTS_PER_PAGE);
+	const productPages = Math.ceil(ALL_PRODUCTS / PRODUCTS_PER_PAGE);
 
 	// return 404
 	if (!products.length || pageNumber > productPages) {
@@ -29,7 +35,7 @@ export default async function ProductsPage({ params }: { params: { pageId: strin
 		<main>
 			<h1>HELLLO all products - {params.pageId}</h1>
 
-			<ul test-id="products-list">
+			<ul data-testid="products-list">
 				{products.map((product) => (
 					<ProductCover key={product.id} name={product.title} {...product} />
 				))}
