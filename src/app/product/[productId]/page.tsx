@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import NextImage from "next/image";
-import { Image } from "@/ui/atoms/Image";
-import { type Product } from "@/types/types";
+import { type Product as ProductType } from "@/types/types";
+import { Product } from "@/ui/atoms/Product";
 
 export async function generateStaticParams() {
 	const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
@@ -24,30 +23,14 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Product({ params }: { params: { productId: string } }) {
+export default async function ProductPage({ params }: { params: { productId: string } }) {
 	const { productId } = params;
 	const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${productId}`);
-	const product = (await res.json()) as Product;
-
-	const { title, price, description, category, image, longDescription, rating, id } = product;
+	const product = (await res.json()) as ProductType;
 
 	return (
-		<div>
-			<h1>{title}</h1>
-			<p>Price: {price}</p>
-			<p>Description: {description}</p>
-			<p>Category: {category}</p>
-
-			<Image src={image} alt={title} as={NextImage} width={100} height={100} />
-
-			<p>Long Description: {longDescription}</p>
-
-			<p>
-				Rating: rate: {rating.rate}
-				count: {rating.count}
-			</p>
-
-			<p>ID: {id}</p>
-		</div>
+		<main>
+			<Product {...product} />
+		</main>
 	);
 }

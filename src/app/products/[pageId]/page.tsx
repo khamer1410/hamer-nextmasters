@@ -4,6 +4,7 @@ import { ProductCover } from "@/ui/atoms/ProductCover";
 import { Pagination } from "@/ui/organisms/Pagination";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 import { getProducts } from "@/utils/getProducts";
+import { Title } from "@/ui/atoms/Title";
 
 const PRODUCTS_PER_PAGE = 5;
 const ALL_PRODUCTS = 25;
@@ -11,9 +12,6 @@ const ALL_PRODUCTS = 25;
 // This function gets called at build time
 export async function generateStaticParams() {
 	const paths = [1, 2, 3, 4, 5];
-
-	// We'll pre-render only these paths at build time.
-	// { fallback: false } means other routes should 404.
 	return paths.map((id) => ({ pageId: id.toString() }));
 }
 
@@ -37,15 +35,15 @@ async function showProducts(pageId: string) {
 
 export default async function ProductsPage({ params }: { params: { pageId: string } }) {
 	const { pageId } = params;
-
 	const { products, productPages } = await showProducts(pageId);
-	return (
-		<main>
-			<h1>HELLLO all products - {params.pageId}</h1>
 
-			<ul data-testid="products-list">
+	return (
+		<main className="container mx-auto px-4">
+			<Title>HELLLO all products - {params.pageId}</Title>
+
+			<ul data-testid="products-list" className="flex flex-col gap-4 py-4">
 				{products.map((product) => (
-					<ProductCover key={product.id} name={product.title} {...product} />
+					<ProductCover key={product.id} {...product} />
 				))}
 			</ul>
 
