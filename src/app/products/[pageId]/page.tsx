@@ -3,8 +3,10 @@ import { type Route } from "next";
 import { ProductCover } from "@/ui/atoms/ProductCover";
 import { Pagination } from "@/ui/organisms/Pagination";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
-import { getProducts } from "@/utils/getProducts";
+import { getProducts } from "@/api/getProducts";
 import { Title } from "@/ui/atoms/Title";
+import { type Product } from "@/types/types";
+import { executeGraphql } from "@/utils/graphQl";
 
 const PRODUCTS_PER_PAGE = 5;
 const ALL_PRODUCTS = 25;
@@ -30,6 +32,13 @@ async function showProducts(pageId: string) {
 		return notFound();
 	}
 
+	const prodGQ = await executeGraphql({
+		query: `query GetOrderById($orderId: ID!) { order(id: $orderId) { total } }`,
+		variables: { orderId: "qwerty" },
+	});
+
+	console.log(prodGQ);
+
 	return { products, productPages };
 }
 
@@ -42,7 +51,7 @@ export default async function ProductsPage({ params }: { params: { pageId: strin
 			<Title>HELLLO all products - {params.pageId}</Title>
 
 			<ul data-testid="products-list" className="flex flex-col gap-4 py-4">
-				{products.map((product) => (
+				{products.map((product: Product) => (
 					<ProductCover key={product.id} {...product} />
 				))}
 			</ul>
