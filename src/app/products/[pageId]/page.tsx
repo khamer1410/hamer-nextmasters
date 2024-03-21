@@ -3,10 +3,10 @@ import { type Route } from "next";
 import { ProductCover } from "@/ui/atoms/ProductCover";
 import { Pagination } from "@/ui/organisms/Pagination";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
-import { getProducts } from "@/api/getProducts";
 import { Title } from "@/ui/atoms/Title";
 import { type Product } from "@/types/types";
 import { executeGraphql } from "@/utils/graphQl";
+import { ProductsGetListDocument } from "@/gql/graphql";
 
 const PRODUCTS_PER_PAGE = 5;
 const ALL_PRODUCTS = 25;
@@ -19,25 +19,23 @@ export async function generateStaticParams() {
 
 async function showProducts(pageId: string) {
 	const pageNumber = parseFloat(pageId);
-
-	const products = await getProducts({
-		take: PRODUCTS_PER_PAGE,
-		offset: (pageNumber - 1) * PRODUCTS_PER_PAGE,
-	});
-
 	const productPages = Math.ceil(ALL_PRODUCTS / PRODUCTS_PER_PAGE);
+
+	// const products = await getProducts({
+	// 	take: PRODUCTS_PER_PAGE,
+	// 	offset: (pageNumber - 1) * PRODUCTS_PER_PAGE,
+	// });
+
+	// todo - add take and offset
+	const prodGQ = await executeGraphql(ProductsGetListDocument);
+
+	console.log("prodGQ", prodGQ);
+	const products = prodGQ.products.data;
 
 	// return 404
 	if (!products.length || pageNumber > productPages) {
 		return notFound();
 	}
-
-	const prodGQ = await executeGraphql({
-		query: `query GetOrderById($orderId: ID!) { order(id: $orderId) { total } }`,
-		variables: { orderId: "qwerty" },
-	});
-
-	console.log(prodGQ);
 
 	return { products, productPages };
 }
