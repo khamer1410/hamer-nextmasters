@@ -14,3 +14,18 @@ query ProductsGetList {
 		}
 	}
 }
+
+query ProductGetById($id: ID!) {
+	product(id: $id) {
+		id
+		name
+		description
+		categories {
+			name
+		}
+		images {
+			url
+		}
+		price
+	}
+}

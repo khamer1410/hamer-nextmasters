@@ -8,7 +8,10 @@ export const Product = ({ name, description, images, id, price, categories }: Pr
 		<Title>{name}</Title>
 		<p>Price: {price}</p>
 		<p>Description: {description}</p>
-		<p>Category: {categories.join(", ")}</p>
+		<div>
+			<h2>Category:</h2>
+			{categories?.map((category) => <p key={category.name}>{category.name}</p>)}
+		</div>
 
 		{images?.map((image) => (
 			<Image key={image.url} src={image.url} alt={name} as={NextImage} width={100} height={100} />

@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
-import { type Product as ProductType } from "@/types/types";
+// import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Product } from "@/ui/atoms/Product";
+import { getProductById } from "@/api/getProducts";
 
 export async function generateStaticParams() {
 	const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
@@ -9,28 +10,38 @@ export async function generateStaticParams() {
 	return products.map((product) => ({ productId: product.id }));
 }
 
-export async function generateMetadata({
-	params,
-}: {
-	params: { productId: string };
-}): Promise<Metadata> {
-	const res = await fetch("https://naszsklep-api.vercel.app/api/products/" + params.productId);
-	const product = (await res.json()) as { title: string; description: string };
+// export async function generateMetadata({
+// 	params,
+// }: {
+// 	params: { productId: string };
+// }): Promise<Metadata> {
+// 	const res = await fetch("https://naszsklep-api.vercel.app/api/products/" + params.productId);
+// 	const product = (await res.json()) as { title: string; description: string };
 
-	return {
-		title: product.title,
-		description: product.description,
-	};
-}
+// 	return {
+// 		title: product.title,
+// 		description: product.description,
+// 	};
+// }
 
 export default async function ProductPage({ params }: { params: { productId: string } }) {
-	const { productId } = params;
-	const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${productId}`);
-	const product = (await res.json()) as ProductType;
+	try {
+		const { productId } = params;
 
-	return (
-		<main>
-			<Product {...product} />
-		</main>
-	);
+		const product = await getProductById(productId);
+
+		if (!product) {
+			return notFound();
+		}
+
+		console.log();
+
+		return (
+			<main>
+				<Product {...product} />
+			</main>
+		);
+	} catch (error) {
+		return notFound();
+	}
 }

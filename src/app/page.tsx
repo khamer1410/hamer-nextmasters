@@ -32,7 +32,7 @@ export default function Home() {
 			<main className="flex min-h-screen flex-col items-center justify-between p-24">
 				<ul data-testid="products-list" className="flex justify-between gap-1">
 					{products.map((product, index) => (
-						<ProductCover key={index} name={product.name} description={product.description} />
+						<ProductCover key={index} {...product} />
 					))}
 				</ul>
 			</main>
