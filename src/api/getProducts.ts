@@ -9,7 +9,8 @@ import { executeGraphql } from "@/utils/graphQl";
  * @param {number} options.take - The number of products to retrieve. Default is 5.
  * @param {number} options.offset - The offset for pagination. Default is 0.
  * @returns {Promise<Product[]>} - A promise that resolves to an array of products.
- */
+ * @deprecated Use getProducts instead.
+ * */
 export async function getProductsFetch({
 	take = 5,
 	offset = 0,
@@ -23,8 +24,8 @@ export async function getProductsFetch({
 	return (await res.json()) as Product[];
 }
 
-export async function getProducts() {
-	const prodGQ = await executeGraphql(ProductsGetListDocument);
+export async function getProducts(count: number, offset: number = 0) {
+	const prodGQ = await executeGraphql(ProductsGetListDocument, { count, offset });
 	const products = prodGQ.products.data;
 	return products;
 }

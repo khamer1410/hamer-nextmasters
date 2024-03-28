@@ -21,8 +21,7 @@ export default async function ProductsPage({ params }: { params: { pageId: strin
 	const pageNumber = parseFloat(pageId);
 	const productPages = Math.ceil(ALL_PRODUCTS / PRODUCTS_PER_PAGE);
 
-	// todo - add take and offset
-	const products = await getProducts();
+	const products = await getProducts(PRODUCTS_PER_PAGE, PRODUCTS_PER_PAGE * (pageNumber - 1));
 
 	// return 404
 	if (!products.length || pageNumber > productPages) {

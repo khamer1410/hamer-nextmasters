@@ -274,7 +274,10 @@ export type SortDirection =
   | 'ASC'
   | 'DESC';
 
-export type ProductsGetListQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProductsGetListQueryVariables = Exact<{
+  count: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+}>;
 
 
 export type ProductsGetListQuery = { products: { data: Array<{ id: string, name: string, description: string, price: number, categories: Array<{ name: string }>, images: Array<{ url: string }> }> } };
@@ -302,8 +305,8 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const ProductsGetListDocument = new TypedDocumentString(`
-    query ProductsGetList {
-  products(take: 10) {
+    query ProductsGetList($count: Int!, $offset: Int!) {
+  products(take: $count, skip: $offset) {
     data {
       id
       name
