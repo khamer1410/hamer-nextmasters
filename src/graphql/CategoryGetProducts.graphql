@@ -1,0 +1,8 @@
+query CategoryProductsGetBySlug($category: String!) {
+	category(slug: $category) {
+		products {
+			id
+			name
+		}
+	}
+}

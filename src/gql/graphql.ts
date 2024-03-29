@@ -274,6 +274,13 @@ export type SortDirection =
   | 'ASC'
   | 'DESC';
 
+export type CategoryProductsGetBySlugQueryVariables = Exact<{
+  category: Scalars['String']['input'];
+}>;
+
+
+export type CategoryProductsGetBySlugQuery = { category?: { products: Array<{ id: string, name: string }> } | null };
+
 export type ProductsGetListQueryVariables = Exact<{
   count: Scalars['Int']['input'];
   offset: Scalars['Int']['input'];
@@ -304,6 +311,16 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const CategoryProductsGetBySlugDocument = new TypedDocumentString(`
+    query CategoryProductsGetBySlug($category: String!) {
+  category(slug: $category) {
+    products {
+      id
+      name
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CategoryProductsGetBySlugQuery, CategoryProductsGetBySlugQueryVariables>;
 export const ProductsGetListDocument = new TypedDocumentString(`
     query ProductsGetList($count: Int!, $offset: Int!) {
   products(take: $count, skip: $offset) {
